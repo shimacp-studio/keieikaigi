@@ -274,6 +274,53 @@ body.dark-mode .minimap { border-color: var(--border-dark); background-color: va
   background-position: center !important;
   border: 1px solid var(--border-light);
 }
+
+@media print {
+  @page {
+    size: A2 landscape; /* A2横向き */
+    margin: 10mm;
+  }
+
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  /* 検索UIや制御パネルは非表示 */
+  .header, .searchbar, .controls, .dark-mode-toggle, .footer-note {
+    display: none !important;
+  }
+
+  /* グリッド縮小 */
+  :root {
+    --seat-h: 70px;
+    --seat-name-base: 12px;
+  }
+
+  .seat {
+    min-height: var(--seat-h);
+    height: var(--seat-h);
+    padding: 4px;
+    font-size: 12px;
+  }
+
+  .seat .name {
+    font-size: 12px !important;
+    line-height: 1.1;
+  }
+
+  .seat .meta {
+    font-size: 10px !important;
+  }
+
+  /* ページいっぱいに中央寄せ */
+  .page {
+    max-width: 100%;
+    margin: 0;
+    gap: 8px;
+  }
+}
+
 </style>
  </head>
  <body>
@@ -454,10 +501,1255 @@ body.dark-mode .minimap { border-color: var(--border-dark); background-color: va
       </div>
      </div>
      <div class="grid-wrapper"><div class="seat-grid" id="seatGrid">
-      <div class="seat js-seat" data-code="196" data-dept="門真店" data-name="沼田 佑典" data-seat="A1">
-       <div class="code">
-        A1
-       </div>
+
+    <div class="seat col-A row-1">
+      <div class="code">196</div>
+      <div class="name">沼田
+佑典</div>
+      <div class="meta">門真店・店長</div>
+    </div>
+    
+
+    <div class="seat col-A row-2">
+      <div class="code">197</div>
+      <div class="name">長山
+保</div>
+      <div class="meta">門真店・総合</div>
+    </div>
+    
+
+    <div class="seat col-A row-3">
+      <div class="code">297</div>
+      <div class="name">比嘉
+一心</div>
+      <div class="meta">門真店・総合</div>
+    </div>
+    
+
+    <div class="seat col-A row-4">
+      <div class="code">335</div>
+      <div class="name">豊田
+慎</div>
+      <div class="meta">門真店・総合</div>
+    </div>
+    
+
+    <div class="seat col-A row-5">
+      <div class="code">349</div>
+      <div class="name">宮平
+亮</div>
+      <div class="meta">門真店・総合</div>
+    </div>
+    
+
+    <div class="seat col-A row-6">
+      <div class="code">368</div>
+      <div class="name">池嶋
+綾花</div>
+      <div class="meta">門真店・総合</div>
+    </div>
+    
+
+    <div class="seat col-A row-9">
+      <div class="code">435</div>
+      <div class="name">村山
+陸</div>
+      <div class="meta">門真店・総合</div>
+    </div>
+    
+
+    <div class="seat col-A row-7">
+      <div class="code">472</div>
+      <div class="name">奥野
+ほのか</div>
+      <div class="meta">門真店・総合</div>
+    </div>
+    
+
+    <div class="seat col-A row-10">
+      <div class="code">477</div>
+      <div class="name">嘉陽
+錬</div>
+      <div class="meta">門真店・総合</div>
+    </div>
+    
+
+    <div class="seat col-A row-11">
+      <div class="code">500</div>
+      <div class="name">竹内
+優</div>
+      <div class="meta">門真店・総合</div>
+    </div>
+    
+
+    <div class="seat col-A row-8">
+      <div class="code">518</div>
+      <div class="name">西山
+朋菜</div>
+      <div class="meta">門真店・総合</div>
+    </div>
+    
+
+    <div class="seat col-B row-11">
+      <div class="code">519</div>
+      <div class="name">大城
+蕉真</div>
+      <div class="meta">門真店・総合</div>
+    </div>
+    
+
+    <div class="seat col-B row-1">
+      <div class="code">71</div>
+      <div class="name">與那覇
+邦己</div>
+      <div class="meta">茨木店・店長</div>
+    </div>
+    
+
+    <div class="seat col-B row-2">
+      <div class="code">167</div>
+      <div class="name">上原
+圭史</div>
+      <div class="meta">茨木店・副店長</div>
+    </div>
+    
+
+    <div class="seat col-B row-3">
+      <div class="code">92</div>
+      <div class="name">宇地原
+徳人</div>
+      <div class="meta">茨木店・総合</div>
+    </div>
+    
+
+    <div class="seat col-B row-4">
+      <div class="code">172</div>
+      <div class="name">加島
+匡哉</div>
+      <div class="meta">茨木店・総合</div>
+    </div>
+    
+
+    <div class="seat col-B row-5">
+      <div class="code">377</div>
+      <div class="name">上原
+匠</div>
+      <div class="meta">茨木店・総合</div>
+    </div>
+    
+
+    <div class="seat col-B row-6">
+      <div class="code">386</div>
+      <div class="name">徳
+裕也</div>
+      <div class="meta">茨木店・総合</div>
+    </div>
+    
+
+    <div class="seat col-B row-7">
+      <div class="code">432</div>
+      <div class="name">井内
+康輔</div>
+      <div class="meta">茨木店・総合</div>
+    </div>
+    
+
+    <div class="seat col-B row-8">
+      <div class="code">434</div>
+      <div class="name">岸本
+翔</div>
+      <div class="meta">茨木店・総合</div>
+    </div>
+    
+
+    <div class="seat col-B row-9">
+      <div class="code">461</div>
+      <div class="name">瑞慶山
+良汰</div>
+      <div class="meta">茨木店・総合</div>
+    </div>
+    
+
+    <div class="seat col-司 row-会">
+      <div class="code">230</div>
+      <div class="name">垣花
+卓也</div>
+      <div class="meta">八尾店・店長</div>
+    </div>
+    
+
+    <div class="seat col-C row-1">
+      <div class="code">333</div>
+      <div class="name">白井
+勇真</div>
+      <div class="meta">八尾店・副店長</div>
+    </div>
+    
+
+    <div class="seat col-C row-2">
+      <div class="code">301</div>
+      <div class="name">髙田
+侑介</div>
+      <div class="meta">八尾店・総合</div>
+    </div>
+    
+
+    <div class="seat col-C row-3">
+      <div class="code">365</div>
+      <div class="name">新堂
+優貴</div>
+      <div class="meta">八尾店・総合</div>
+    </div>
+    
+
+    <div class="seat col-C row-4">
+      <div class="code">367</div>
+      <div class="name">城山
+泰典</div>
+      <div class="meta">八尾店・総合</div>
+    </div>
+    
+
+    <div class="seat col-C row-5">
+      <div class="code">401</div>
+      <div class="name">加山
+貴大</div>
+      <div class="meta">八尾店・総合</div>
+    </div>
+    
+
+    <div class="seat col-C row-6">
+      <div class="code">405</div>
+      <div class="name">竹内
+浩晃</div>
+      <div class="meta">八尾店・総合</div>
+    </div>
+    
+
+    <div class="seat col-C row-7">
+      <div class="code">424</div>
+      <div class="name">樋口
+叶子</div>
+      <div class="meta">八尾店・総合</div>
+    </div>
+    
+
+    <div class="seat col-C row-8">
+      <div class="code">447</div>
+      <div class="name">柴垣
+勇気</div>
+      <div class="meta">八尾店・総合</div>
+    </div>
+    
+
+    <div class="seat col-C row-9">
+      <div class="code">470</div>
+      <div class="name">園田
+巧</div>
+      <div class="meta">八尾店・総合</div>
+    </div>
+    
+
+    <div class="seat col-C row-10">
+      <div class="code">524</div>
+      <div class="name">祖川
+椋哉</div>
+      <div class="meta">八尾店・総合</div>
+    </div>
+    
+
+    <div class="seat col-D row-3">
+      <div class="code">159</div>
+      <div class="name">池村
+正樹</div>
+      <div class="meta">守口店・副店長</div>
+    </div>
+    
+
+    <div class="seat col-D row-2">
+      <div class="code">104</div>
+      <div class="name">金武
+寿洋</div>
+      <div class="meta">守口店・副店長</div>
+    </div>
+    
+
+    <div class="seat col-D row-4">
+      <div class="code">90</div>
+      <div class="name">山口
+敬</div>
+      <div class="meta">守口店・主任</div>
+    </div>
+    
+
+    <div class="seat col-D row-5">
+      <div class="code">111</div>
+      <div class="name">西平
+達司</div>
+      <div class="meta">守口店・主任</div>
+    </div>
+    
+
+    <div class="seat col-D row-6">
+      <div class="code">267</div>
+      <div class="name">堀川
+大</div>
+      <div class="meta">守口店・主任</div>
+    </div>
+    
+
+    <div class="seat col-D row-7">
+      <div class="code">284</div>
+      <div class="name">銘苅
+健</div>
+      <div class="meta">守口店・主任</div>
+    </div>
+    
+
+    <div class="seat col-D row-8">
+      <div class="code">340</div>
+      <div class="name">伊藤
+圭祐</div>
+      <div class="meta">守口店・主任</div>
+    </div>
+    
+
+    <div class="seat col-D row-9">
+      <div class="code">360</div>
+      <div class="name">百﨑
+健太</div>
+      <div class="meta">守口店・総合</div>
+    </div>
+    
+
+    <div class="seat col-D row-10">
+      <div class="code">490</div>
+      <div class="name">高良
+琉河</div>
+      <div class="meta">守口店・総合</div>
+    </div>
+    
+
+    <div class="seat col-D row-11">
+      <div class="code">491</div>
+      <div class="name">日髙
+忠之助</div>
+      <div class="meta">守口店・総合</div>
+    </div>
+    
+
+    <div class="seat col-D row-12">
+      <div class="code">499</div>
+      <div class="name">山城
+美月</div>
+      <div class="meta">守口店・総合</div>
+    </div>
+    
+
+    <div class="seat col-D row-13">
+      <div class="code">501</div>
+      <div class="name">永村
+亮真</div>
+      <div class="meta">守口店・総合</div>
+    </div>
+    
+
+    <div class="seat col-E row-1">
+      <div class="code">346</div>
+      <div class="name">藤原
+孝平</div>
+      <div class="meta">豊中店・店長</div>
+    </div>
+    
+
+    <div class="seat col-E row-2">
+      <div class="code">142</div>
+      <div class="name">藤山
+征一郎</div>
+      <div class="meta">豊中店・副店長</div>
+    </div>
+    
+
+    <div class="seat col-E row-3">
+      <div class="code">170</div>
+      <div class="name">金城
+俊</div>
+      <div class="meta">豊中店・総合</div>
+    </div>
+    
+
+    <div class="seat col-E row-4">
+      <div class="code">233</div>
+      <div class="name">末吉
+富之</div>
+      <div class="meta">豊中店・総合</div>
+    </div>
+    
+
+    <div class="seat col-E row-5">
+      <div class="code">326</div>
+      <div class="name">目瀬
+邦道</div>
+      <div class="meta">豊中店・総合</div>
+    </div>
+    
+
+    <div class="seat col-E row-6">
+      <div class="code">358</div>
+      <div class="name">與那嶺
+一樹</div>
+      <div class="meta">豊中店・総合</div>
+    </div>
+    
+
+    <div class="seat col-E row-7">
+      <div class="code">381</div>
+      <div class="name">藤本
+喬一</div>
+      <div class="meta">豊中店・総合</div>
+    </div>
+    
+
+    <div class="seat col-E row-8">
+      <div class="code">382</div>
+      <div class="name">野上
+愛紗</div>
+      <div class="meta">豊中店・総合</div>
+    </div>
+    
+
+    <div class="seat col-E row-9">
+      <div class="code">387</div>
+      <div class="name">井上
+太郎</div>
+      <div class="meta">豊中店・総合</div>
+    </div>
+    
+
+    <div class="seat col-E row-10">
+      <div class="code">462</div>
+      <div class="name">上間
+鷹照</div>
+      <div class="meta">豊中店・総合</div>
+    </div>
+    
+
+    <div class="seat col-E row-11">
+      <div class="code">495</div>
+      <div class="name">玉城
+克樹</div>
+      <div class="meta">豊中店・総合</div>
+    </div>
+    
+
+    <div class="seat col-E row-12">
+      <div class="code">498</div>
+      <div class="name">金城
+優太</div>
+      <div class="meta">豊中店・総合</div>
+    </div>
+    
+
+    <div class="seat col-E row-13">
+      <div class="code">516</div>
+      <div class="name">木野
+元太</div>
+      <div class="meta">豊中店・総合</div>
+    </div>
+    
+
+    <div class="seat col-F row-13">
+      <div class="code">523</div>
+      <div class="name">河野
+龍成</div>
+      <div class="meta">豊中店・総合</div>
+    </div>
+    
+
+    <div class="seat col-F row-2">
+      <div class="code">330</div>
+      <div class="name">神田
+武</div>
+      <div class="meta">伏見店・副店長</div>
+    </div>
+    
+
+    <div class="seat col-F row-4">
+      <div class="code">59</div>
+      <div class="name">宮城
+いその</div>
+      <div class="meta">伏見店・総合</div>
+    </div>
+    
+
+    <div class="seat col-F row-3">
+      <div class="code">312</div>
+      <div class="name">友利
+好児</div>
+      <div class="meta">伏見店・総合</div>
+    </div>
+    
+
+    <div class="seat col-F row-5">
+      <div class="code">337</div>
+      <div class="name">梶本
+直寛</div>
+      <div class="meta">伏見店・総合</div>
+    </div>
+    
+
+    <div class="seat col-F row-6">
+      <div class="code">407</div>
+      <div class="name">松延
+篤</div>
+      <div class="meta">伏見店・総合</div>
+    </div>
+    
+
+    <div class="seat col-F row-7">
+      <div class="code">437</div>
+      <div class="name">森本
+信勇</div>
+      <div class="meta">伏見店・総合</div>
+    </div>
+    
+
+    <div class="seat col-F row-8">
+      <div class="code">438</div>
+      <div class="name">島袋
+満輝</div>
+      <div class="meta">伏見店・総合</div>
+    </div>
+    
+
+    <div class="seat col-F row-9">
+      <div class="code">451</div>
+      <div class="name">山内
+慧人</div>
+      <div class="meta">伏見店・総合</div>
+    </div>
+    
+
+    <div class="seat col-F row-10">
+      <div class="code">464</div>
+      <div class="name">久永
+琢人</div>
+      <div class="meta">伏見店・総合</div>
+    </div>
+    
+
+    <div class="seat col-F row-11">
+      <div class="code">479</div>
+      <div class="name">稲福
+政哉</div>
+      <div class="meta">伏見店・総合</div>
+    </div>
+    
+
+    <div class="seat col-F row-12">
+      <div class="code">481</div>
+      <div class="name">池原
+達貴</div>
+      <div class="meta">伏見店・総合</div>
+    </div>
+    
+
+    <div class="seat col-G row-1">
+      <div class="code">184</div>
+      <div class="name">亀島
+卓也</div>
+      <div class="meta">尼崎店・店長</div>
+    </div>
+    
+
+    <div class="seat col-G row-2">
+      <div class="code">332</div>
+      <div class="name">細田
+恵亮</div>
+      <div class="meta">尼崎店・副店長</div>
+    </div>
+    
+
+    <div class="seat col-G row-3">
+      <div class="code">219</div>
+      <div class="name">仲宗根
+守</div>
+      <div class="meta">尼崎店・総合</div>
+    </div>
+    
+
+    <div class="seat col-G row-4">
+      <div class="code">263</div>
+      <div class="name">中池
+遼太</div>
+      <div class="meta">尼崎店・総合</div>
+    </div>
+    
+
+    <div class="seat col-G row-5">
+      <div class="code">311</div>
+      <div class="name">滝川
+貴志</div>
+      <div class="meta">尼崎店・総合</div>
+    </div>
+    
+
+    <div class="seat col-G row-6">
+      <div class="code">388</div>
+      <div class="name">小川
+洋史</div>
+      <div class="meta">尼崎店・総合</div>
+    </div>
+    
+
+    <div class="seat col-G row-7">
+      <div class="code">439</div>
+      <div class="name">金城
+尚史</div>
+      <div class="meta">尼崎店・総合</div>
+    </div>
+    
+
+    <div class="seat col-G row-8">
+      <div class="code">459</div>
+      <div class="name">外間
+完丸</div>
+      <div class="meta">尼崎店・総合</div>
+    </div>
+    
+
+    <div class="seat col-G row-9">
+      <div class="code">467</div>
+      <div class="name">高山
+愛生</div>
+      <div class="meta">尼崎店・総合</div>
+    </div>
+    
+
+    <div class="seat col-G row-11">
+      <div class="code">471</div>
+      <div class="name">前西
+烈斗</div>
+      <div class="meta">尼崎店・総合</div>
+    </div>
+    
+
+    <div class="seat col-G row-12">
+      <div class="code">485</div>
+      <div class="name">佐古
+翔太</div>
+      <div class="meta">尼崎店・総合</div>
+    </div>
+    
+
+    <div class="seat col-G row-13">
+      <div class="code">496</div>
+      <div class="name">池田
+昌宏</div>
+      <div class="meta">尼崎店・総合</div>
+    </div>
+    
+
+    <div class="seat col-G row-10">
+      <div class="code">508</div>
+      <div class="name">脇
+光佳利</div>
+      <div class="meta">尼崎店・総合</div>
+    </div>
+    
+
+    <div class="seat col-H row-1">
+      <div class="code">254</div>
+      <div class="name">髙良
+政之</div>
+      <div class="meta">高槻店・店長</div>
+    </div>
+    
+
+    <div class="seat col-H row-2">
+      <div class="code">345</div>
+      <div class="name">池嶋
+佑太</div>
+      <div class="meta">高槻店・副店長</div>
+    </div>
+    
+
+    <div class="seat col-H row-3">
+      <div class="code">135</div>
+      <div class="name">嘉数
+洋平</div>
+      <div class="meta">高槻店・総合</div>
+    </div>
+    
+
+    <div class="seat col-H row-4">
+      <div class="code">268</div>
+      <div class="name">檀野
+恵利</div>
+      <div class="meta">高槻店・一般</div>
+    </div>
+    
+
+    <div class="seat col-H row-6">
+      <div class="code">286</div>
+      <div class="name">大城
+玄太</div>
+      <div class="meta">高槻店・総合</div>
+    </div>
+    
+
+    <div class="seat col-H row-7">
+      <div class="code">374</div>
+      <div class="name">中井
+貴大</div>
+      <div class="meta">高槻店・総合</div>
+    </div>
+    
+
+    <div class="seat col-H row-5">
+      <div class="code">484</div>
+      <div class="name">永原
+小雪</div>
+      <div class="meta">高槻店・総合</div>
+    </div>
+    
+
+    <div class="seat col-I row-1">
+      <div class="code">36</div>
+      <div class="name">宮城
+斉</div>
+      <div class="meta">宇治店・店長</div>
+    </div>
+    
+
+    <div class="seat col-I row-2">
+      <div class="code">133</div>
+      <div class="name">下地
+博和</div>
+      <div class="meta">宇治店・副店長</div>
+    </div>
+    
+
+    <div class="seat col-I row-3">
+      <div class="code">226</div>
+      <div class="name">仲程
+実也</div>
+      <div class="meta">宇治店・総合</div>
+    </div>
+    
+
+    <div class="seat col-I row-4">
+      <div class="code">283</div>
+      <div class="name">平良
+啓介</div>
+      <div class="meta">宇治店・総合</div>
+    </div>
+    
+
+    <div class="seat col-I row-5">
+      <div class="code">331</div>
+      <div class="name">渡部
+拓也</div>
+      <div class="meta">宇治店・総合</div>
+    </div>
+    
+
+    <div class="seat col-I row-6">
+      <div class="code">361</div>
+      <div class="name">青木
+宏之</div>
+      <div class="meta">宇治店・総合</div>
+    </div>
+    
+
+    <div class="seat col-I row-7">
+      <div class="code">423</div>
+      <div class="name">八坂
+圭祐</div>
+      <div class="meta">宇治店・総合</div>
+    </div>
+    
+
+    <div class="seat col-I row-8">
+      <div class="code">492</div>
+      <div class="name">金城
+蓮</div>
+      <div class="meta">宇治店・総合</div>
+    </div>
+    
+
+    <div class="seat col-F row-1">
+      <div class="code">169</div>
+      <div class="name">宮平
+悠司</div>
+      <div class="meta">右京店・店長</div>
+    </div>
+    
+
+    <div class="seat col-J row-1">
+      <div class="code">288</div>
+      <div class="name">北野
+幹人</div>
+      <div class="meta">右京店・副店長</div>
+    </div>
+    
+
+    <div class="seat col-J row-2">
+      <div class="code">195</div>
+      <div class="name">都木
+篤</div>
+      <div class="meta">右京店・主任</div>
+    </div>
+    
+
+    <div class="seat col-J row-3">
+      <div class="code">255</div>
+      <div class="name">目瀬
+亮介</div>
+      <div class="meta">右京店・総合</div>
+    </div>
+    
+
+    <div class="seat col-J row-4">
+      <div class="code">264</div>
+      <div class="name">金城
+礼</div>
+      <div class="meta">右京店・総合</div>
+    </div>
+    
+
+    <div class="seat col-J row-5">
+      <div class="code">362</div>
+      <div class="name">西森
+健太</div>
+      <div class="meta">右京店・総合</div>
+    </div>
+    
+
+    <div class="seat col-J row-6">
+      <div class="code">366</div>
+      <div class="name">中村
+侑里乃</div>
+      <div class="meta">右京店・総合</div>
+    </div>
+    
+
+    <div class="seat col-J row-7">
+      <div class="code">395</div>
+      <div class="name">比嘉
+憲吾</div>
+      <div class="meta">右京店・総合</div>
+    </div>
+    
+
+    <div class="seat col-J row-8">
+      <div class="code">416</div>
+      <div class="name">玉城
+遼二</div>
+      <div class="meta">右京店・総合</div>
+    </div>
+    
+
+    <div class="seat col-J row-9">
+      <div class="code">417</div>
+      <div class="name">平安
+夏季</div>
+      <div class="meta">右京店・総合</div>
+    </div>
+    
+
+    <div class="seat col-J row-10">
+      <div class="code">441</div>
+      <div class="name">知花
+大介</div>
+      <div class="meta">右京店・総合</div>
+    </div>
+    
+
+    <div class="seat col-J row-11">
+      <div class="code">448</div>
+      <div class="name">矢野
+聖心</div>
+      <div class="meta">右京店・総合</div>
+    </div>
+    
+
+    <div class="seat col-J row-12">
+      <div class="code">453</div>
+      <div class="name">仲村
+大輝</div>
+      <div class="meta">右京店・総合</div>
+    </div>
+    
+
+    <div class="seat col-B row-10">
+      <div class="code">457</div>
+      <div class="name">松田
+健太郎</div>
+      <div class="meta">右京店・総合</div>
+    </div>
+    
+
+    <div class="seat col-K row-12">
+      <div class="code">482</div>
+      <div class="name">関森
+一馬</div>
+      <div class="meta">右京店・総合</div>
+    </div>
+    
+
+    <div class="seat col-K row-1">
+      <div class="code">320</div>
+      <div class="name">松岡
+真澄</div>
+      <div class="meta">鶴見店・店長</div>
+    </div>
+    
+
+    <div class="seat col-K row-2">
+      <div class="code">250</div>
+      <div class="name">佐久川
+政之</div>
+      <div class="meta">鶴見店・副店長</div>
+    </div>
+    
+
+    <div class="seat col-K row-3">
+      <div class="code">302</div>
+      <div class="name">酒井
+賢一</div>
+      <div class="meta">鶴見店・主任</div>
+    </div>
+    
+
+    <div class="seat col-K row-4">
+      <div class="code">329</div>
+      <div class="name">橋本
+剛志</div>
+      <div class="meta">鶴見店・主任</div>
+    </div>
+    
+
+    <div class="seat col-K row-5">
+      <div class="code">280</div>
+      <div class="name">粟國
+安等</div>
+      <div class="meta">鶴見店・総合</div>
+    </div>
+    
+
+    <div class="seat col-K row-6">
+      <div class="code">339</div>
+      <div class="name">岸本
+尚洋</div>
+      <div class="meta">鶴見店・総合</div>
+    </div>
+    
+
+    <div class="seat col-K row-7">
+      <div class="code">350</div>
+      <div class="name">髙田
+雄一郎</div>
+      <div class="meta">鶴見店・総合</div>
+    </div>
+    
+
+    <div class="seat col-K row-8">
+      <div class="code">352</div>
+      <div class="name">福田
+朗</div>
+      <div class="meta">鶴見店・総合</div>
+    </div>
+    
+
+    <div class="seat col-K row-9">
+      <div class="code">420</div>
+      <div class="name">浦久保
+皓司</div>
+      <div class="meta">鶴見店・総合</div>
+    </div>
+    
+
+    <div class="seat col-K row-10">
+      <div class="code">507</div>
+      <div class="name">宮本
+夏奈衣</div>
+      <div class="meta">鶴見店・総合</div>
+    </div>
+    
+
+    <div class="seat col-K row-11">
+      <div class="code">520</div>
+      <div class="name">宮城
+秀司</div>
+      <div class="meta">鶴見店・総合</div>
+    </div>
+    
+
+    <div class="seat col-L row-1">
+      <div class="code">156</div>
+      <div class="name">高原
+景太郎</div>
+      <div class="meta">EC課・店長</div>
+    </div>
+    
+
+    <div class="seat col-L row-2">
+      <div class="code">236</div>
+      <div class="name">佐久本
+剛行</div>
+      <div class="meta">EC課・副店長</div>
+    </div>
+    
+
+    <div class="seat col-L row-3">
+      <div class="code">262</div>
+      <div class="name">我那覇
+康之</div>
+      <div class="meta">EC課・主任</div>
+    </div>
+    
+
+    <div class="seat col-L row-4">
+      <div class="code">308</div>
+      <div class="name">小林
+慶三</div>
+      <div class="meta">EC課・総合</div>
+    </div>
+    
+
+    <div class="seat col-L row-5">
+      <div class="code">315</div>
+      <div class="name">原
+弘行</div>
+      <div class="meta">EC課・総合</div>
+    </div>
+    
+
+    <div class="seat col-L row-6">
+      <div class="code">389</div>
+      <div class="name">大西
+祐暉</div>
+      <div class="meta">EC課・総合</div>
+    </div>
+    
+
+    <div class="seat col-L row-8">
+      <div class="code">393</div>
+      <div class="name">宮國
+月美</div>
+      <div class="meta">EC課・総合</div>
+    </div>
+    
+
+    <div class="seat col-L row-7">
+      <div class="code">444</div>
+      <div class="name">Rudi
+Cahyadi
+Thamrin</div>
+      <div class="meta">EC課・総合</div>
+    </div>
+    
+
+    <div class="seat col-L row-9">
+      <div class="code">474</div>
+      <div class="name">松田
+真緒</div>
+      <div class="meta">EC課・総合</div>
+    </div>
+    
+
+    <div class="seat col-I row-10">
+      <div class="code">211</div>
+      <div class="name">城間
+生土</div>
+      <div class="meta">アクト・店長</div>
+    </div>
+    
+
+    <div class="seat col-I row-11">
+      <div class="code">146</div>
+      <div class="name">平野
+和雄</div>
+      <div class="meta">アクト・総合</div>
+    </div>
+    
+
+    <div class="seat col-I row-12">
+      <div class="code">274</div>
+      <div class="name">中村
+淳一朗</div>
+      <div class="meta">アクト・総合</div>
+    </div>
+    
+
+    <div class="seat col-I row-13">
+      <div class="code">344</div>
+      <div class="name">高江洲
+義盛</div>
+      <div class="meta">アクト・総合</div>
+    </div>
+    
+
+    <div class="seat col-D row-1">
+      <div class="code">51</div>
+      <div class="name">宮城
+和也</div>
+      <div class="meta">法人営業課・店長</div>
+    </div>
+    
+
+    <div class="seat col-H row-10">
+      <div class="code">229</div>
+      <div class="name">新垣
+祐一</div>
+      <div class="meta">法人営業課・店長</div>
+    </div>
+    
+
+    <div class="seat col-H row-11">
+      <div class="code">285</div>
+      <div class="name">高橋
+和大</div>
+      <div class="meta">法人営業課・店長</div>
+    </div>
+    
+
+    <div class="seat col-H row-12">
+      <div class="code">291</div>
+      <div class="name">橋本
+晋卓</div>
+      <div class="meta">法人営業課・主任</div>
+    </div>
+    
+
+    <div class="seat col-H row-13">
+      <div class="code">493</div>
+      <div class="name">知念
+優衣</div>
+      <div class="meta">法人営業課・総合</div>
+    </div>
+    
+
+    <div class="seat col-部 row-長">
+      <div class="code">141</div>
+      <div class="name">京極
+公寿</div>
+      <div class="meta">営業本部・部長</div>
+    </div>
+    
+
+    <div class="seat col-課 row-長">
+      <div class="code">37</div>
+      <div class="name">島袋
+康成</div>
+      <div class="meta">企画課・課長</div>
+    </div>
+    
+
+    <div class="seat col-課 row-長">
+      <div class="code">101</div>
+      <div class="name">真玉橋
+卓</div>
+      <div class="meta">企画課・課長</div>
+    </div>
+    
+
+    <div class="seat col-会 row-議運営">
+      <div class="code">296</div>
+      <div class="name">筒井
+悠</div>
+      <div class="meta">デジ企画・課長</div>
+    </div>
+    
+
+    <div class="seat col-会 row-議運営">
+      <div class="code">157</div>
+      <div class="name">玉城
+純</div>
+      <div class="meta">デジ企画・主任</div>
+    </div>
+    
+
+    <div class="seat col-会 row-議運営">
+      <div class="code">309</div>
+      <div class="name">青田
+武士</div>
+      <div class="meta">デジ企画・主任</div>
+    </div>
+    
+
+    <div class="seat col-L row-10">
+      <div class="code">290</div>
+      <div class="name">平野
+敬章</div>
+      <div class="meta">経理課・主任</div>
+    </div>
+    
+
+    <div class="seat col-L row-11">
+      <div class="code">217</div>
+      <div class="name">仲底
+教子</div>
+      <div class="meta">経理課・主任</div>
+    </div>
+    
+
+    <div class="seat col-L row-12">
+      <div class="code">369</div>
+      <div class="name">川﨑
+沙耶</div>
+      <div class="meta">経理課・一般</div>
+    </div>
+    
+
+    <div class="seat col-L row-13">
+      <div class="code">380</div>
+      <div class="name">山本
+優里奈</div>
+      <div class="meta">経理課・一般</div>
+    </div>
+    
+
+    <div class="seat col-取 row-締役 is-blue">
+      <div class="code">nan</div>
+      <div class="name">島袋
+盛市郎</div>
+      <div class="meta">島袋本社・取締役社長</div>
+    </div>
+    
+
+    <div class="seat col-部 row-長">
+      <div class="code">nan</div>
+      <div class="name">石垣　亮</div>
+      <div class="meta">島袋本社・部長</div>
+    </div>
+    
+
+    <div class="seat col-A row-12">
+      <div class="code">nan</div>
+      <div class="name">當間
+充</div>
+      <div class="meta">島袋本社・主任</div>
+    </div>
+    
+
+    <div class="seat col-B row-12">
+      <div class="code">nan</div>
+      <div class="name">糸数
+美伶</div>
+      <div class="meta">島袋本社・デジ企画</div>
+    </div>
+    
+
+    <div class="seat col-C row-12">
+      <div class="code">nan</div>
+      <div class="name">田中
+美織</div>
+      <div class="meta">島袋本社・デジ企画</div>
+    </div>
+    
+</div>
        <div class="name">
         沼田 佑典
        </div>
