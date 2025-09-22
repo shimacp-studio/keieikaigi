@@ -276,6 +276,513 @@ body.dark-mode .minimap { border-color: var(--border-dark); background-color: va
   border: 1px solid var(--border-light);
 }
 </style>
+<style id="fit-one-page">
+  :root{ --scale: 1; }
+  /* 既存見た目を極力崩さず、seat-gridだけ縮小 */
+  .seat-grid{
+    transform-origin: 0 0;
+    transform: scale(var(--scale));
+    width: max-content; /* 縮小時の横切れ防止 */
+  }
+  .print-toolbar{
+    display:flex; align-items:center; gap:.5rem;
+    margin:.5rem 0 0.75rem; font-size: .95rem;
+  }
+  .print-toolbar .btn-fit{
+    padding:.35rem .6rem; border:1px solid #cbd5e1; border-radius:.45rem;
+    background:#fff; cursor:pointer;
+  }
+  .print-toolbar .chk-compact{ margin-left:auto; }
+  .print-toolbar .hint{ color:#64748b; font-size:.85rem; }
+
+  /* コンパクト表示：カードの余白とフォントを微調整（見た目はキープしつつ密度UP） */
+  body.compact .seat{ padding:6px !important; }
+  body.compact .seat .code{ font-size: 12px !important; }
+  body.compact .seat .name{ font-size: 14px !important; line-height:1.15; white-space: pre-line; }
+  body.compact .seat .meta{ font-size: 11px !important; }
+  body.compact .seat-grid{ gap: 6px !important; }
+
+  /* 印刷最適化：A2縦を想定（前回要望に合わせる）。ページに収めやすい設定 */
+  @page { size: A2 portrait; margin: 10mm; }
+  @media print{
+    /* 印刷時は自動でコンパクト＋縮小 */
+    :root{ --scale: 0.78; }
+    body{ -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body{ margin:0 !important; }
+    body .print-toolbar{ display:none !important; }
+    body{ counter-reset: page; }
+    body{ }
+    body{ }
+    body{ }
+    body{ }
+    body{ }
+    body{ }
+    body{ }
+    body.compact .seat{ padding:5px !important; }
+    body.compact .seat-grid{ gap: 5px !important; }
+    /* 必要に応じて1ページ化をサポート */
+    html, body{ height:auto !important; overflow:visible !important; }
+  }
+</style>
+<style id="card-tweak">
+  /* 氏名カードの横幅を少しだけ縮小して、氏名フォントを少し大きく */
+  .seat{ min-width: 76px !important; }
+  .seat .name{ font-size: 16px !important; line-height: 1.2; white-space: pre-line; }
+  /* スマホではさらにコンパクト幅 + 氏名を少し大きく */
+  @media (max-width: 768px){
+    .seat{ min-width: 72px !important; }
+    .seat .name{ font-size: 17px !important; line-height: 1.2; }
+  }
+  /* コンパクト表示時も見やすく */
+  body.compact .seat{ min-width: 70px !important; }
+  body.compact .seat .name{ font-size: 15px !important; }
+</style>
+<style id="card-tweak-v2">
+  /* 横幅をさらに縮小し、名前は必ず折り返し・見切れ防止 */
+  .seat{ min-width: 64px !important; padding: 6px 6px !important; }
+  .seat .name{
+    font-size: 16.5px !important;
+    line-height: 1.15;
+    white-space: pre-wrap;           /* スペース改行 + 通常改行を許可 */
+    overflow-wrap: anywhere;         /* どこでも折り返し（日本語もOK） */
+    word-break: normal;              /* 不要な切断を避けつつ、anywhereで救済 */
+    line-break: loose;               /* 日本語の禁則を緩めて改行しやすく */
+  }
+  .seat .code{ font-size: 12px !important; }
+  .seat .meta{ font-size: 11px !important; }
+
+  /* コンパクト表示でさらに狭めたい場合 */
+  body.compact .seat{ min-width: 60px !important; padding: 5px 5px !important; }
+  body.compact .seat .name{ font-size: 15.5px !important; }
+
+  /* スマホ最適化 */
+  @media (max-width: 768px){
+    .seat{ min-width: 60px !important; }
+    .seat .name{ font-size: 17px !important; }
+  }
+</style>
+<style id="card-tweak-v3">
+  /* === さらに一段階スリム化 & 縦縮小 === */
+  .seat{
+    min-width: 58px !important;            /* v2:64px → v3:58px */
+    padding: 4px 5px !important;           /* 縦をさらに圧縮 */
+    border-radius: 10px !important;
+  }
+  .seat .code{
+    font-size: 11px !important;
+    line-height: 1.0 !important;
+    margin: 0 0 2px 0 !important;
+  }
+  .seat .name{
+    font-size: 16px !important;            /* 文字はやや大きめ維持 */
+    line-height: 1.08 !important;          /* 縦方向をさらに詰める */
+    margin: 0 !important;
+    white-space: pre-wrap;                  /* スペース改行＋通常改行 */
+    overflow-wrap: anywhere;                /* どこでも折り返し */
+    word-break: normal;                     /* 不要な分断は避ける */
+    line-break: loose;                      /* 日本語の改行を緩める */
+  }
+  .seat .meta{
+    font-size: 10px !important;            /* 役職/所属/コードの高さを詰める */
+    line-height: 1.1 !important;
+    margin-top: 3px !important;
+  }
+
+  /* コンパクト表示をONにしたときは更に圧縮 */
+  body.compact .seat{
+    min-width: 54px !important;
+    padding: 3px 4px !important;
+  }
+  body.compact .seat .name{
+    font-size: 15px !important;
+    line-height: 1.06 !important;
+  }
+  body.compact .seat .meta{
+    font-size: 9.5px !important;
+    line-height: 1.05 !important;
+  }
+
+  /* スマホでは文字の可読性を優先しつつカード幅を収める */
+  @media (max-width: 768px){
+    .seat{ min-width: 56px !important; }
+    .seat .name{ font-size: 16.5px !important; line-height: 1.08 !important; }
+  }
+</style>
+<style id="auto-fit-style">
+  .seat{
+    display:flex; flex-direction:column; justify-content:flex-start; align-items:center;
+  }
+  .seat .code{ flex:0 0 auto; }
+  .seat .name{
+    flex:0 0 auto;
+    max-height: 3.4em;            /* 最大3行相当 */
+    text-align:center;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    word-break: normal;
+    line-break: loose;
+  }
+  .seat .meta{
+    margin-top: 4px !important;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;         /* 2行に制限 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>
+<style id="card-tweak-v4">
+  /* 下の余白を徹底的に圧縮（固定高さを解除し、内側スペースを詰める） */
+  .seat{
+    height: auto !important;          /* 既存の固定高さがあれば無効化 */
+    min-height: unset !important;
+    padding-bottom: 4px !important;   /* 下パディングを小さく */
+  }
+  .seat .code{
+    margin-bottom: 2px !important;
+  }
+  .seat .name{
+    margin: 0 !important;
+    max-height: 3.0em;                /* 3行相当まで */
+  }
+  .seat .meta{
+    margin-top: 2px !important;       /* メタの上マージンを圧縮 */
+  }
+  /* グリッドの縦ギャップも少し詰める（見た目に大きく影響しない範囲で） */
+  .seat-grid{
+    row-gap: 6px !important;
+  }
+
+  /* コンパクト時はさらに詰める */
+  body.compact .seat{ padding-bottom: 3px !important; }
+  body.compact .seat .meta{ margin-top: 1px !important; }
+  body.compact .seat-grid{ row-gap: 5px !important; }
+</style>
+<style id="card-tweak-v5">
+  /* 3行レイアウトで不要な空白を排除 */
+  .seat{
+    display: grid !important;
+    grid-template-rows: auto auto auto !important; /* code / name / meta */
+    row-gap: 2px !important;
+    height: auto !important;
+    min-height: unset !important;
+    padding: 4px 5px !important;
+    min-width: 58px !important;         /* v3の幅を維持（更に詰めたい時は54pxへ） */
+    border-radius: 10px !important;
+  }
+  .seat .code{
+    margin: 0 !important;
+    font-size: 11px !important;
+    line-height: 1.0 !important;
+  }
+  .seat .name{
+    margin: 0 !important;
+    font-size: 16px !important;
+    line-height: 1.06 !important;        /* 縦方向をさらに詰める */
+    text-align: center !important;
+    /* 折り返しを最大 ~2.8行 に制限して見切れ防止（JSで自動縮小も併用） */
+    max-height: 2.8em !important;
+    white-space: pre-wrap !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+    line-break: loose !important;
+  }
+  .seat .meta{
+    margin: 0 !important;
+    font-size: 10px !important;
+    line-height: 1.05 !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;     /* 2行制限 */
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+
+  /* グリッドの行間も少し詰める */
+  .seat-grid{ row-gap: 5px !important; }
+
+  /* コンパクトON時は更に圧縮 */
+  body.compact .seat{ min-width: 54px !important; padding: 3px 4px !important; }
+  body.compact .seat .name{ font-size: 15px !important; line-height: 1.04 !important; max-height: 2.6em !important; }
+  body.compact .seat .meta{ font-size: 9.5px !important; line-height: 1.04 !important; }
+  body.compact .seat-grid{ row-gap: 4px !important; }
+
+  /* スマホ最適化 */
+  @media (max-width: 768px){
+    .seat{ min-width: 56px !important; }
+    .seat .name{ font-size: 16.5px !important; }
+  }
+</style>
+<style id="card-tweak-v6">
+  /* コンパクト時の見切れ対策：name の最大高さを少しだけ拡張し、中央寄せを強化 */
+  body.compact .seat .name{
+    max-height: 2.9em !important;     /* v5: 2.6em → 2.9em */
+    text-align: center !important;
+  }
+  /* コメント（meta）を中央に */
+  .seat .meta{
+    text-align: center !important;
+    align-self: center !important;
+  }
+  body.compact .seat .meta{
+    text-align: center !important;
+    align-self: center !important;
+  }
+</style>
+<style id="card-uniform-v7">
+  :root{ --card-h: 138px; }              /* デフォルトのカード高さ */
+  body.compact{ --card-h: 124px; }       /* コンパクト時のカード高さ */
+
+  /* 統一高さ & フレックスレイアウト */
+  .seat{
+    display:flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    height: var(--card-h) !important;
+    min-height: var(--card-h) !important;
+    max-height: var(--card-h) !important;
+  }
+  .seat .code{ flex: 0 0 auto; margin-bottom: 2px !important; }
+  .seat .name{
+    flex: 1 1 auto;                      /* 余白はここで吸収 */
+    display: block;
+    width: 100%;
+    text-align: center !important;
+    margin: 0 !important;
+    line-height: 1.06 !important;
+    white-space: pre-wrap !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+    line-break: loose !important;
+    /* はみ出し検知のために高さ制限は設けない（下部metaを押し出さないように余白はfitJSで調整） */
+  }
+  .seat .meta{
+    flex: 0 0 auto;
+    text-align: center !important;
+    margin-top: 4px !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+</style>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&amp;family=Noto+Sans+JP:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<style id="center-compact-stylish">
+  /* スタイリッシュな日本語ゴシックを氏名に適用 */
+  .seat .name{
+    font-family: 'Zen Kaku Gothic New','Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic','Meiryo',sans-serif !important;
+    font-weight: 700 !important;
+    letter-spacing: .02em !important;
+  }
+  .seat .meta{
+    font-family: 'Zen Kaku Gothic New','Noto Sans JP','Hiragino Kaku Gothic ProN','Yu Gothic','Meiryo',sans-serif !important;
+    text-align: center !important;
+    align-self: center !important;
+  }
+  .seat .code{
+    font-weight: 600;
+  }
+</style>
+<style id="center-name-hide-compact-label">
+  /* 1) コンパクト表示のチェック/説明を非表示 */
+  .print-toolbar .chk-compact,
+  .print-toolbar .hint{ display:none !important; }
+
+  /* 2) 氏名をカード中央に揃える（上下左右センター） */
+  .seat{
+    display: grid !important;
+    grid-template-rows: auto 1fr auto !important; /* code / name(中央) / meta */
+  }
+  .seat .code{ align-self: start; justify-self: center; }
+  .seat .name{
+    display: flex !important;
+    align-items: center !important;     /* 上下中央 */
+    justify-content: center !important; /* 左右中央 */
+    text-align: center !important;
+    margin: 0 !important;
+  }
+  .seat .meta{ align-self: end; justify-self: center; text-align: center !important; }
+</style>
+<style id="center-fix-v2">
+  .seat{
+    display: grid !important;
+    grid-template-rows: auto 1fr auto !important; /* 上:code / 中:name / 下:meta */
+  }
+  .seat .name{
+    height: 100% !important;        /* 1fr領域を全て占有 */
+    min-height: 0 !important;       /* grid子要素のはみ出し防止 */
+    display: flex !important;
+    align-items: center !important;  /* 縦中央 */
+    justify-content: center !important; /* 横中央 */
+    text-align: center !important;
+    margin: 0 !important;
+    max-height: none !important;     /* 既存の max-height を無効化 */
+  }
+  .seat .meta{
+    text-align: center !important;
+    align-self: end !important;      /* 下側に固定 */
+    justify-self: center !important;
+  }
+</style>
+<style id="center-force-v3">
+  /* 座席カード全体を縦flexにして、氏名(name)を中央に固定 */
+  .seat{
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-items: stretch !important;
+  }
+  .seat .code{ flex: 0 0 auto !important; text-align: center !important; }
+  .seat .name{
+    flex: 1 1 auto !important;      /* 余白はこの領域が吸収 */
+    display: flex !important;
+    align-items: center !important;  /* 縦中央 */
+    justify-content: center !important; /* 横中央 */
+    text-align: center !important;
+    height: auto !important;
+    max-height: none !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    white-space: pre-wrap !important;
+    overflow-wrap: anywhere !important;
+  }
+  .seat .meta{
+    flex: 0 0 auto !important;
+    text-align: center !important;
+    margin-top: 4px !important;
+    align-self: center !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+</style>
+<style id="center-absolute-v4">
+  .seat{
+    display: grid !important;
+    grid-template-rows: auto 1fr auto !important;  /* 1: code  2: center area  3: meta */
+    align-items: stretch !important;
+    position: relative !important;
+    padding-top: 18px !important;   /* code 分の安全域 */
+    padding-bottom: 18px !important;/* meta 分の安全域 */
+  }
+  .seat .code{
+    grid-row: 1 / 2 !important;
+    align-self: start !important;
+    justify-self: center !important;
+    z-index: 2 !important;
+    margin: 0 !important;
+  }
+  .seat .meta{
+    grid-row: 3 / 4 !important;
+    align-self: end !important;
+    justify-self: center !important;
+    text-align: center !important;
+    z-index: 2 !important;
+    margin: 0 !important;
+  }
+  /* 氏名をカードの幾何学的中心へ（上下左右センター） */
+  .seat .name{
+    grid-row: 1 / 4 !important;     /* 3行すべてを跨ぐ */
+    align-self: center !important;
+    justify-self: center !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    z-index: 1 !important;          /* code/meta より後ろに配置 */
+    margin: 0 !important;
+    max-width: 92% !important;      /* code/meta と干渉しにくく */
+    white-space: pre-wrap !important;
+    overflow-wrap: anywhere !important;
+  }
+</style>
+<style id="center-clean-v5">
+  /* カードは統一高（v7の変数を流用） */
+  .seat{
+    display:flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-items: stretch !important;
+  }
+  .seat .code{
+    flex:0 0 auto !important;
+    text-align:center !important;
+    margin:0 0 2px 0 !important;
+  }
+  .seat .name{
+    flex:1 1 auto !important;
+    display:flex !important;
+    align-items:center !important;     /* 縦中央 */
+    justify-content:center !important; /* 横中央 */
+    text-align:center !important;
+    margin:0 !important;
+    /* ここが重要：むやみに文字を折り返さない（日本語は基本連続） */
+    white-space: pre-line !important;  /* スペース/\nでのみ改行 */
+    word-break: keep-all !important;   /* CJKを勝手に分断しない */
+    overflow-wrap: normal !important;  /* anywhere を無効化 */
+    line-break: strict !important;     /* 禁則を厳しめに */
+  }
+  .seat .meta{
+    flex:0 0 auto !important;
+    text-align:center !important;
+    margin-top:4px !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+</style>
+<style id="center-absolute-final">
+  .seat{
+    position: relative !important;
+    padding-top: 28px !important;   /* 上: 座席CDの安全域 */
+    padding-bottom: 28px !important;/* 下: コメントの安全域 */
+    display: block !important;      /* 前のflex/grid指定を打ち消す */
+  }
+  .seat .code{
+    position: absolute !important;
+    top: 8px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    margin: 0 !important;
+    text-align: center !important;
+    width: 96% !important;
+  }
+  .seat .meta{
+    position: absolute !important;
+    bottom: 8px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    margin: 0 !important;
+    text-align: center !important;
+    width: 96% !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+  .seat .name{
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    margin: 0 !important;
+    width: 92% !important;
+    text-align: center !important;
+    white-space: pre-line !important;   /* スペース/\nで改行 */
+    word-break: keep-all !important;
+    overflow-wrap: normal !important;
+    line-break: strict !important;
+  }
+</style>
+
+<style id="name-bump-up">
+  .seat .name{
+    transform: translate(-50%, -75%) !important; /* 少しだけ上に寄せる */
+  }
+</style>
 </head>
 <body>
 <div class="header">
@@ -454,7 +961,16 @@ body.dark-mode .minimap { border-color: var(--border-dark); background-color: va
        L
       </div>
 </div>
-<div class="grid-wrapper"><div class="seat-grid" id="seatGrid"><div class="seat col-A js-seat" data-code="196" data-dept="門真店" data-name="沼田 佑典" data-seat="A1">
+<div class="grid-wrapper">
+<div aria-label="表示設定" class="print-toolbar" role="toolbar">
+<button class="btn-fit" data-scale="1.00" type="button">100%</button>
+<button class="btn-fit" data-scale="0.90" type="button">90%</button>
+<button class="btn-fit" data-scale="0.80" type="button">80%</button>
+<button class="btn-fit" data-scale="0.70" type="button">70%</button>
+<label class="chk-compact"><input id="toggleCompact" type="checkbox"/> コンパクト表示</label>
+<span class="hint">（印刷時は自動でコンパクト＋縮小）</span>
+</div>
+<div class="seat-grid" id="seatGrid"><div class="seat col-A js-seat" data-code="196" data-dept="門真店" data-name="沼田 佑典" data-seat="A1">
 <div class="code">A1</div>
 <div class="name">沼田
 佑典</div>
@@ -1553,6 +2069,208 @@ Thamrin</div>
     }
   }
   addEventListener('load', convertAll, {once:true});
+})();
+</script>
+<script id="fit-one-page-js">
+(function(){
+  function setScale(v){
+    document.documentElement.style.setProperty('--scale', String(v));
+  }
+  function setCompact(on){
+    document.body.classList.toggle('compact', !!on);
+    localStorage.setItem('seatCompact', on ? '1' : '0');
+  }
+  // 既定値復元
+  const savedCompact = localStorage.getItem('seatCompact') === '1';
+  setCompact(savedCompact);
+  const chk = document.getElementById('toggleCompact');
+  if (chk){ chk.checked = savedCompact; }
+
+  document.querySelectorAll('.print-toolbar .btn-fit').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const v = parseFloat(btn.dataset.scale || '1') || 1;
+      setScale(v);
+    });
+  });
+  chk?.addEventListener('change', (e)=> setCompact(e.target.checked));
+})();
+</script>
+<script id="auto-fit-script">
+(function(){
+  function fitName(el, base=18, min=12){
+    // 既にフォントサイズがスタイル指定されていればそれを基準に
+    const cs = getComputedStyle(el);
+    let size = parseFloat(cs.fontSize) || base;
+    // スペースがあれば姓⇄名の間でまず1回だけ改行（既にpre-wrapなので\nも反映）
+    if (!el.dataset.splitDone){
+      const t = el.textContent;
+      const m = t.match(/(.+?)\s+(.+)/);
+      if (m){ el.textContent = m[1] + "\n" + m[2]; }
+      el.dataset.splitDone = "1";
+    }
+    // フィットするまで 0.5px 刻みで縮小
+    const maxLoops = 32;
+    let loops = 0;
+    while (el.scrollHeight > el.clientHeight && size > min && loops < maxLoops){
+      size -= 0.5;
+      el.style.fontSize = size + "px";
+      loops++;
+    }
+  }
+  function run(){
+    document.querySelectorAll('.seat .name').forEach(el=>fitName(el));
+  }
+  // 初期化とフォント読み込み後に再実行
+  if (document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
+  window.addEventListener('load', run);
+  // ウィンドウ幅/スケール変更でも再フィット
+  let ro;
+  if ('ResizeObserver' in window){
+    ro = new ResizeObserver(()=> run());
+    document.querySelectorAll('.seat .name').forEach(n=> ro.observe(n));
+  } else {
+    window.addEventListener('resize', run);
+  }
+})();
+</script>
+<script id="auto-fit-script-v5">
+(function(){
+  function fitName(el, baseMin=11){
+    // 既にサイズが設定されていればそれを起点にする
+    const cs = getComputedStyle(el);
+    let size = parseFloat(cs.fontSize) || 16;
+    const min = baseMin;
+
+    // 初回のみ、姓と名の間（全角/半角スペース）で強制改行
+    if (!el.dataset.splitDone){
+      const t = el.textContent;
+      const m = t.match(/(.+?)\s+(.+)/);
+      if (m){ el.textContent = m[1] + "\n" + m[2]; }
+      el.dataset.splitDone = "1";
+    }
+
+    // はみ出している間だけ 0.5px 刻みで縮小
+    let loops = 0;
+    while (el.scrollHeight > el.clientHeight && size > min && loops < 40){
+      size -= 0.5;
+      el.style.fontSize = size + "px";
+      loops++;
+    }
+  }
+
+  function run(){
+    document.querySelectorAll('.seat .name').forEach(el=> fitName(el));
+  }
+
+  if (document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
+  window.addEventListener('load', run);
+
+  // リサイズやズーム（CSS変数変更）時にも再計算
+  let ro;
+  if ('ResizeObserver' in window){
+    ro = new ResizeObserver(()=> run());
+    document.querySelectorAll('.seat .name').forEach(n=> ro.observe(n));
+  } else {
+    window.addEventListener('resize', run);
+  }
+})();
+</script>
+<script id="auto-fit-compact-v6">
+(function(){
+  function fitOne(el, minPx){
+    const cs = getComputedStyle(el);
+    let size = parseFloat(cs.fontSize) || 16;
+    // 姓名の間改行（初回のみ）
+    if (!el.dataset.splitDone){
+      const t = el.textContent;
+      const m = t.match(/(.+?)\s+(.+)/);
+      if (m){ el.textContent = m[1] + "\n" + m[2]; }
+      el.dataset.splitDone = "1";
+    }
+    let loops = 0;
+    while (el.scrollHeight > el.clientHeight && size > minPx && loops < 50){
+      size -= 0.5;
+      el.style.fontSize = size + "px";
+      loops++;
+    }
+  }
+  function run(){
+    const isCompact = document.body.classList.contains('compact');
+    const minPx = isCompact ? 10 : 11;       // コンパクト時は更に下げて収める
+    document.querySelectorAll('.seat .name').forEach(el=> fitOne(el, minPx));
+  }
+  // 初期/ロード時/リサイズ時に適用、compactトグル変更にも反応
+  const apply = ()=> run();
+  if (document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', apply);
+  } else {
+    apply();
+  }
+  window.addEventListener('load', apply);
+  window.addEventListener('resize', apply);
+  // compact 切替にフック（トグルIDが既存実装のものに一致）
+  document.getElementById('toggleCompact')?.addEventListener('change', apply);
+})();
+</script>
+<script id="force-compact">
+(function(){
+  function applyCompact(){
+    document.body.classList.add('compact');
+    var chk = document.getElementById('toggleCompact');
+    if (chk){
+      chk.checked = true;
+      chk.setAttribute('disabled','disabled');
+      chk.closest('label')?.classList.add('opacity-60');
+      chk.title = '常にコンパクト表示です';
+    }
+  }
+  if (document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyCompact);
+  } else {
+    applyCompact();
+  }
+  window.addEventListener('load', applyCompact);
+})();
+</script>
+<script id="auto-fit-clean-v5">
+(function(){
+  function fitOne(el, minPx){
+    const cs = getComputedStyle(el);
+    let size = parseFloat(cs.fontSize) || 16;
+    // 姓と名の間でのみ1回改行（全角/半角スペース対応）
+    if (!el.dataset.splitDone){
+      const t = el.textContent;
+      const m = t.match(/(.+?)\s+(.+)/);
+      if (m){ el.textContent = m[1] + "\n" + m[2]; }
+      el.dataset.splitDone = "1";
+    }
+    // 収まらない場合のみフォント縮小
+    let loops = 0;
+    const min = document.body.classList.contains('compact') ? 10 : 11;
+    while (el.scrollHeight > el.clientHeight && size > min && loops < 50){
+      size -= 0.5;
+      el.style.fontSize = size + "px";
+      loops++;
+    }
+  }
+  function run(){
+    document.querySelectorAll('.seat .name').forEach(el=> fitOne(el));
+  }
+  if (document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
+  window.addEventListener('load', run);
+  window.addEventListener('resize', run);
 })();
 </script>
 </body>
