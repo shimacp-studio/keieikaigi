@@ -3,7 +3,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="width=1280, initial-scale=1" name="viewport"/>
 <title>
    全体会議 座席表（検索付き）
   </title>
@@ -275,6 +275,28 @@ body.dark-mode .minimap { border-color: var(--border-dark); background-color: va
   background-position: center !important;
   border: 1px solid var(--border-light);
 }
+
+/* === Force each seat card into its correct column A..L via CSS grid-column === */
+.seat.col-A { grid-column: 1; }
+.seat.col-B { grid-column: 2; }
+.seat.col-C { grid-column: 3; }
+.seat.col-D { grid-column: 4; }
+.seat.col-E { grid-column: 5; }
+.seat.col-F { grid-column: 6; }
+.seat.col-G { grid-column: 7; }
+.seat.col-H { grid-column: 8; }
+.seat.col-I { grid-column: 9; }
+.seat.col-J { grid-column: 10; }
+.seat.col-K { grid-column: 11; }
+.seat.col-L { grid-column: 12; }
+
+/* === QR Card (sidebar) === */
+.qr-card{ display:flex; flex-direction:column; gap:6px; align-items:center; justify-content:center; padding:10px;}
+.qr-card .qr-title{ font-weight:800; font-size:13px; color: var(--muted-light); }
+body.dark-mode .qr-card .qr-title{ color: var(--muted-dark); }
+.qr-card img{ width:140px; height:140px; border-radius:12px; border:1px solid var(--border-light); box-shadow: var(--shadow-md); background:#fff; }
+body.dark-mode .qr-card img{ border-color: var(--border-dark); background: var(--surface-dark); }
+.qr-sticky{ position: sticky; bottom: 12px; }
 </style>
 <style id="fit-one-page">
   :root{ --scale: 1; }
@@ -777,10 +799,196 @@ body.dark-mode .minimap { border-color: var(--border-dark); background-color: va
     line-break: strict !important;
   }
 </style>
-
 <style id="name-bump-up">
   .seat .name{
     transform: translate(-50%, -75%) !important; /* 少しだけ上に寄せる */
+  }
+</style>
+<style id="force-desktop-on-mobile">
+  /* スマホでもPC版と同じ表示にする（モバイル用の非表示指定を打ち消す） */
+  .sidebar, .left, .members, .namelist { display: block !important; }
+  .mobile-toolbar { display: none !important; }  /* モバイルズームUIは非表示 */
+  /* 座席表の縮尺は等倍 */
+  :root{ --m-scale: 1 !important; }
+</style>
+<style id="iphone-leftcards-force">
+  /* iOS Safari を特徴検知して、幅条件なしで適用（PC幅固定のままでも発火） */
+  @supports (-webkit-touch-callout: none) {
+    /* 左パネル自体を細く */
+    .left, .sidebar{ max-width: 200px !important; }
+
+    /* 名簿カード（クラス名の揺れを広くカバー） */
+    .left .js-person, .sidebar .js-person,
+    .left .person-card, .sidebar .person-card,
+    .left .card, .sidebar .card,
+    .left [class*="member"], .sidebar [class*="member"]{
+      display: block !important;
+      width: 120px !important;         /* ★iPhoneでは強制的に細く */
+      padding: 5px 6px !important;
+      font-size: 11px !important;
+      line-height: 1.2 !important;
+      box-sizing: border-box !important;
+    }
+
+    /* もし名簿がグリッド/フレックスなら、詰めて並べる */
+    .left, .sidebar{
+      display: block !important;
+    }
+    .left .list, .sidebar .list,
+    .left .container, .sidebar .container{
+      display: block !important;
+    }
+  }
+</style>
+<style id="iphone-allocate-to-grid">
+  /* iPhone検出（iOS Safari想定） */
+  @supports (-webkit-touch-callout: none) {
+    :root{ --left-w: 200px; --iphone-scale: 1.08; }
+
+    /* レイアウトをflex前提で広く取る（クラス名の揺れを広くカバー） */
+    .layout, .container, .wrap, .main-wrap, .content-wrap{
+      display: flex !important;
+      gap: 0 !important;
+    }
+    .left, .sidebar{
+      flex: 0 0 var(--left-w) !important;
+      max-width: var(--left-w) !important;
+      width: var(--left-w) !important;
+    }
+    .main, .content, .right, .seat_area, .grid-area, .seat-wrapper{
+      flex: 1 1 auto !important;
+      width: auto !important;
+      max-width: calc(100% - var(--left-w)) !important;
+    }
+
+    /* 座席表ビューポート（存在する場合） */
+    .grid-viewport{
+      overflow: auto !important;
+      -webkit-overflow-scrolling: touch !important;
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+
+    /* 座席表を少しだけ拡大（PCレイアウトのまま見やすく） */
+    .grid-viewport .seat-grid,
+    .seat_area .seat-grid,
+    .content .seat-grid,
+    .seat-grid{
+      transform-origin: 0 0 !important;
+      transform: scale(var(--iphone-scale)) !important;
+      width: max-content !important; /* はみ出しは横スクロールで */
+    }
+  }
+</style>
+<style id="iphone-shift-left">
+  @supports (-webkit-touch-callout: none) {
+    /* レイアウト全体を左詰め優先に。中央寄せの auto マージンを打ち消す */
+    .layout, .container, .wrap, .main-wrap, .content-wrap, .seat-wrapper, .grid-area, .seat_area, .main, .content{
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      padding-left: 0 !important;
+      justify-content: flex-start !important;
+      align-items: flex-start !important;
+    }
+
+    /* ビューポートやグリッド自身の余白も左詰め */
+    .grid-viewport, .seat-grid{
+      margin-left: 0 !important;
+      padding-left: 0 !important;
+      left: 0 !important;
+    }
+
+    /* 左パネル分のスペースをメインに割り当て（既に設定済みでも再強制） */
+    :root{ --left-w: 200px; }
+    .left, .sidebar{ flex: 0 0 var(--left-w) !important; max-width: var(--left-w) !important; width: var(--left-w) !important; }
+    .main, .content, .right, .seat_area, .grid-area, .seat-wrapper{
+      flex: 1 1 auto !important;
+      width: auto !important;
+      max-width: calc(100% - var(--left-w)) !important;
+    }
+
+    /* 万一中央寄せの transform/translate 等があれば打ち消す（座席表を“左に寄せる”） */
+    .grid-viewport .seat-grid, .seat-grid{
+      transform-origin: 0 0 !important;
+    }
+  }
+</style>
+<style id="iphone-shiftleft-tight">
+  /* iOS Safari向けに“左寄せ最優先”の強制スタイルを適用 */
+  @supports (-webkit-touch-callout: none) {
+    :root{ --left-w: 200px; }
+
+    /* ベース余白の全解除 */
+    html, body{ margin:0 !important; padding:0 !important; }
+    .page, .wrapper, .wrap, .layout, .container, .content-wrap, .main-wrap{
+      margin:0 !important; padding:0 !important; max-width:none !important; gap:0 !important;
+    }
+
+    /* サイドバーは固定幅、メインは残り全幅を占有 */
+    .left, .sidebar{ flex: 0 0 var(--left-w) !important; width: var(--left-w) !important; max-width: var(--left-w) !important; }
+    .main, .content, .right, .seat_area, .grid-area, .seat-wrapper, .content-inner{
+      flex: 1 1 auto !important; width:auto !important; max-width:calc(100% - var(--left-w)) !important;
+      margin:0 !important; padding:0 !important;
+    }
+
+    /* 中央寄せの auto マージンを打ち消し、左基準に */
+    [class*="container"], [class*="inner"], [class*="content"]{
+      margin-left:0 !important; margin-right:0 !important;
+    }
+
+    /* ビューポートと座席グリッドを左端に固定 */
+    .grid-viewport, .seat-grid{
+      position: relative !important;
+      left: 0 !important; right: auto !important;
+      margin-left: 0 !important; padding-left: 0 !important;
+    }
+
+    /* ヘッダーや検索列がgrid/flexで中央寄せなら左寄せに切替 */
+    .filters, .searchbar, .toolbar, .print-toolbar{
+      justify-content:flex-start !important;
+    }
+  }
+</style>
+
+<style id="iphone-shiftleft-and-colfix">
+  /* iOS Safariに限定して適用 */
+  @supports (-webkit-touch-callout: none) {
+    :root{
+      --left-w: 200px;
+      --iphone-left-shift: -16px;   /* ← さらに左へ寄せる量（必要なら -20px などに） */
+    }
+
+    /* 1) 座席表そのものをさらに左に寄せる */
+    .grid-viewport, .seat-grid{
+      margin-left: var(--iphone-left-shift) !important;
+      left: 0 !important;
+    }
+
+    /* 2) 列ヘッダ（A〜L）のずれを同じだけ補正
+          想定されるクラス名を幅広くカバーして同じ移動量を適用します */
+    .col-letters, .col-header, .col-legend, .cols, .seat-cols, .seat-headers,
+    .grid-viewport + .col-letters, .grid-viewport + .cols, .filters .cols {
+      position: relative;
+      left: var(--iphone-left-shift) !important;
+      margin-left: 0 !important;
+      padding-left: 0 !important;
+      text-align: center !important;
+    }
+    /* 各ヘッダアイテムは中央寄せ */
+    .col-letters > *,
+    .col-header > *,
+    .col-legend > *,
+    .cols > *,
+    .seat-cols > *,
+    .seat-headers > *{
+      text-align: center !important;
+    }
+
+    /* 3) 念のため、外側の中央寄せを無効化 */
+    .layout, .container, .wrap, .main-wrap, .content-wrap, .seat-wrapper, .grid-area, .seat_area, .main, .content{
+      margin-left: 0 !important; margin-right: 0 !important;
+      padding-left: 0 !important; justify-content: flex-start !important; align-items: flex-start !important;
+    }
   }
 </style>
 </head>
@@ -889,6 +1097,14 @@ body.dark-mode .minimap { border-color: var(--border-dark); background-color: va
       </div>
 </div>
 </div>
+
+<div class="group qr-sticky" aria-label="座席表QR">
+  <div class="sidecard qr-card">
+    <div class="qr-title">座席表QR</div>
+    <img src="data:image/png;base64,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" alt="座席表QRコード"/>
+  </div>
+</div>
+
 </aside>
 <main>
 <div class="stage">
@@ -922,44 +1138,6 @@ body.dark-mode .minimap { border-color: var(--border-dark); background-color: va
 <button class="btn-clear" id="btnClear">
        クリア
       </button>
-</div>
-<div class="col-labels">
-<div class="col-label">
-       A
-      </div>
-<div class="col-label">
-       B
-      </div>
-<div class="col-label">
-       C
-      </div>
-<div class="col-label">
-       D
-      </div>
-<div class="col-label">
-       E
-      </div>
-<div class="col-label">
-       F
-      </div>
-<div class="col-label">
-       G
-      </div>
-<div class="col-label">
-       H
-      </div>
-<div class="col-label">
-       I
-      </div>
-<div class="col-label">
-       J
-      </div>
-<div class="col-label">
-       K
-      </div>
-<div class="col-label">
-       L
-      </div>
 </div>
 <div class="grid-wrapper">
 <div aria-label="表示設定" class="print-toolbar" role="toolbar">
