@@ -304,17 +304,21 @@ body.dark-mode .qr-card img{ border-color: var(--border-dark); background: var(-
   .seat-grid{
     transform-origin: 0 0;
     transform: scale(var(--scale));
-    width: max-content; /* 縮小時の横切れ防止 */
+    width: 100%; /* 縮小時の横切れ防止 */
   }
+  .is-scaled .seat-grid{ width: max-content; }
   .print-toolbar{
     display:flex; align-items:center; gap:.5rem;
     margin:.5rem 0 0.75rem; font-size: .95rem;
   }
+  .is-scaled .seat-grid{ width: max-content; }
   .print-toolbar .btn-fit{
     padding:.35rem .6rem; border:1px solid #cbd5e1; border-radius:.45rem;
     background:#fff; cursor:pointer;
   }
+  .is-scaled .seat-grid{ width: max-content; }
   .print-toolbar .chk-compact{ margin-left:auto; }
+  .is-scaled .seat-grid{ width: max-content; }
   .print-toolbar .hint{ color:#64748b; font-size:.85rem; }
 
   /* コンパクト表示：カードの余白とフォントを微調整（見た目はキープしつつ密度UP） */
@@ -328,7 +332,7 @@ body.dark-mode .qr-card img{ border-color: var(--border-dark); background: var(-
   @page { size: A2 portrait; margin: 10mm; }
   @media print{
     /* 印刷時は自動でコンパクト＋縮小 */
-    :root{ --scale: 0.78; }
+    :root{ --scale: 1; }
     body{ -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     body{ margin:0 !important; }
     body .print-toolbar{ display:none !important; }
@@ -2253,6 +2257,7 @@ Thamrin</div>
 (function(){
   function setScale(v){
     document.documentElement.style.setProperty('--scale', String(v));
+    document.documentElement.classList.toggle('is-scaled', v !== 1);
   }
   function setCompact(on){
     document.body.classList.toggle('compact', !!on);
